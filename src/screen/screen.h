@@ -17,6 +17,8 @@ public:
 	// Screen's constructor
 	Screen(string::size_type height, string::size_type width, char bkground = '#');
 
+	enum class Direction{HOME,FORWARD,BACK,UP,DOWN,END};
+
 	// get the Screen's height
 	string::size_type height() const { return height_; }
 	// get the Screen's width
@@ -37,6 +39,8 @@ public:
 	// move the cursor to the specified row and column
 	void move(string::size_type row, string::size_type col);
 
+	void move(Screen::Direction dir);
+
 	// get the character at the cursor's current position
 	char get() const { return _screen[cursor_]; }
 	// get the character at the specified row and column
@@ -56,6 +60,8 @@ public:
 	// check whether the specified co-ordinates lie within the screen
 	bool checkRange(string::size_type row, string::size_type col) const;
 
+	// create a square at (row,col) with sides of length length
+	void square(int row, int col, int length);
 private:
 	// constants
 	// 0 represents the top-left screen element
@@ -77,7 +83,8 @@ private:
 	// the Screen's data is stored as a string
 	string _screen;
 };
-
+// The internal representation can be done using an array or vector, this would not change the public interface as the vector or array can be printed using the display function.
+// If the class' interface is change all files that depend on the class must be changed, while changing the implementation without adjusting the interface does not affect any dependant files.
 
 #endif
 

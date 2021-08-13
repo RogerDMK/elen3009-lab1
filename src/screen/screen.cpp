@@ -34,7 +34,7 @@ void Screen::up()
 {   // move cursor_ up one row of screen
 	// do not wrap around
 	if ( row() == 1 ) // at top?
-		cerr << "Screen::up - Cannot wrap around in a vertical direction" << endl;
+		cursor_ = cursor_ + width_*(height_-1);
 	else
 		cursor_ -= width_;
 
@@ -45,7 +45,7 @@ void Screen::down()
 {   // move cursor_ down one row of screen
 	// do not wrap around
 	if ( row() == height_ ) // at bottom?
-		cerr << "Screen::down - Cannot wrap around in a vertical direction" << endl;
+		cursor_ = cursor_ - width_*(height_-1);
 	else
 		cursor_ += width_;
 
@@ -82,7 +82,7 @@ void Screen::set( char ch )
 	return;
 }
 
-void Screen::set( const string& s )
+void Screen::set( const string& s ) // 4.2) Makes sure the string s input can not be changed in the function
 {   // write string beginning at current cursor_ position
 	auto space = remainingSpace();
 	auto len = s.size();
@@ -142,7 +142,7 @@ void Screen::reSize( string::size_type h, string::size_type w, char bkground )
 	return;
 }
 
-void Screen::display() const
+void Screen::display() const // 4.2) Ensures the display function can not change the screen object
 {
 	for ( string::size_type ix = 0; ix < height_; ++ix )
 	{ // for each row
@@ -155,7 +155,7 @@ void Screen::display() const
 	return;
 }
 
-bool Screen::checkRange( string::size_type row, string::size_type col ) const
+bool Screen::checkRange( string::size_type row, string::size_type col ) const // 4.2) Stops the screen object from being modified, but does not stop the row and col variables from being changed
 {   // validate coordinates
 	if (row < 1 || row > height_ || col < 1 || col > width_)
 	{
@@ -163,6 +163,68 @@ bool Screen::checkRange( string::size_type row, string::size_type col ) const
 		return false;
 	}
 	return true;
+}
+
+void Screen::move(Screen::Direction dir){ // This function is redundant as all features are implemented with pre-existing functions which are easier to call
+	switch (dir)
+	{
+	case Direction::HOME:
+		home();
+		break;
+	case Direction::FORWARD:
+		forward();
+		break;
+	case Direction::BACK:
+		back();
+		break;
+	case Direction::UP:
+		up();
+		break;
+	case Direction::DOWN:
+		down();
+		break;
+	case Direction::END:
+		end();
+		break;
+	default:
+		cout << "Direction is not valid" << endl;
+		break;
+	}
+}
+
+// Existing interface can be used to implement the function
+/* This function does not form part of the responsibilities of the screen object as it is not useful in interfacing or setting up the screen.
+The square can be implemented outside the class. */
+void Screen::square(int row, int col, int length){
+	// Furthest row and column from the input
+	int maxRow = row+length-1;
+	int maxCol = col+length-1;
+	// Error checking
+	if((maxRow > height_) && (maxCol > width_)){
+		cerr<< "Screen::square - There are not enough rows or columns for the specified square"<< endl;
+		return;
+	}
+	if(maxRow > height_){
+		cerr<<"Screen::square - Not enough rows for the specified square"<<endl;
+		return;
+	}
+	if(maxCol > width_){
+		cerr<<"Screen::square - Not enough columns for the specified square"<<endl;
+		return;
+	}
+	// Creates square with 'X' edges and ' ' inside
+	for(int curRow = row; curRow < row+length; curRow++){
+		for(int curCol = col; curCol < col+length;curCol++){
+			move(curRow,curCol);
+			if((curRow == row)||(curRow == maxRow)||(curCol == col)||(curCol == maxCol)){
+				set('X');
+			}
+			else{
+				set(' ');
+			}
+		}
+	}
+	return;
 }
 
 string::size_type Screen::remainingSpace() const
@@ -175,4 +237,3 @@ string::size_type Screen::row() const
 {   // return current row
 	return (cursor_ + width_)/width_;
 }
-
