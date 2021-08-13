@@ -92,3 +92,6 @@ Makefile
 
 ### macOS ###
 *.DS_Store
+
+### My ignores ###
+*.out
