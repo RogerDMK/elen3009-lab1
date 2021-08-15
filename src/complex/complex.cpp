@@ -4,6 +4,8 @@
 #include <iostream>	// contains the definition of cout, endl
 #include <complex>	// contains the complex class definition
 
+// Exercise 3.1 Any line of text/code between two forward slashes and the end of line will be ignored by the compiler,therefore will not execute
+
 using namespace std; // cout, endl, complex are all part of this namespace
 
 int main()
@@ -14,8 +16,8 @@ int main()
 	auto answer = num1 * num2; // type deduced for 'answer' is: complex<float>
 
 	cout << "The answer is: " << answer << endl;
-	cout << "Or in a more familiar form: " << answer.real() 
-			<< " + " << answer.imag() << "j" 
+	cout << "Or in a more familiar form: " << answer.real()
+			<< " + " << answer.imag() << "j"
 			<< endl	<< endl;
 
 	// answer++;
