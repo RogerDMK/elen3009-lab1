@@ -1,27 +1,53 @@
-// complex.cpp
-// Multiplying complex numbers
-
-#include <iostream>	// contains the definition of cout, endl
-#include <complex>	// contains the complex class definition
-
-// Exercise 3.1 Any line of text/code between two forward slashes and the end of line will be ignored by the compiler,therefore will not execute
-
-using namespace std; // cout, endl, complex are all part of this namespace
+#include <iostream>
+#include <complex>
+#include <cmath>
+//Exercise 3.3
+using namespace std;
 using complx = complex<float>;
+
+void printRealAns(auto &a,auto &b,auto &disc)
+{
+    auto ans1 = ((-1*b)+sqrt(disc))/(2*a); //Qaudratic formula (first root)
+    auto ans2 = ((-1*b)-sqrt(disc))/(2*a); //Qaudratic formula (second root)
+    cout<<"x = " <<ans1<<" or "<<" x = "<<ans2<<endl<<endl;
+}
+
+void printComplexAns(auto &a,auto &b,auto &disc)
+{
+    auto ans = complx{(-1*b)/(2*a),(-1*disc)/(2*a)}; //Gives the complex answer after simplification
+
+    cout <<"x = "<< ans.real()<<" + "<<ans.imag()<<"j"<<" or x = " <<ans.real()<<" - "<<ans.imag()<<"j"<<endl<<endl;
+}
+
 int main()
 {
-	auto num1 = complx{2.0, 2.0};  // use auto for type deduction
-	auto num2 = complx{4.0, -2.0}; // use uniform initialisation syntax (curly braces)
+    auto a=0.0f,b=0.0f,c=0.0f,disc=0.0f;
+    auto key=' ';
 
-	auto answer = num1 * num2; // type deduced for 'answer' is: complex<float>
+    while(key!='q')
+    {
+        cout << "Enter a,b and c"<<endl;
+        cin >>a>>b>>c;
+        cout <<endl;
 
-	cout << "The answer is: " << answer << endl;
-	cout << "Or in a more familiar form: " << answer.real()
-			<< " + " << answer.imag() << "j"
-			<< endl	<< endl;
+        disc = pow(b,2)-4*a*c; //Calculates the discriminant
 
-	// answer++;
+        if(disc>0)
+        {
+           printRealAns(a,b,disc); //Prints the real answer if discriminant is positive
+        }
 
-	return 0;
+        else if(disc<0)
+        {
+           printComplexAns(a,b,disc); //Prints the complex answer if discriminant is negative
+        }
+
+        cout<<"Do you wish to do another calculation? Press q to quit or an other key to continue"<<endl;
+        cin>>key;
+        cout<<endl;
+
+    }
+
+return 0;
 }
 
